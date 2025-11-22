@@ -1,131 +1,347 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+// import {LogBox} from 'react-native-macos';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+// import {useState} from 'react';
+// import {Button, Modal, Text, ViewStyle} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// const container: ViewStyle = {
+//   flex: 1,
+//   justifyContent: 'center',
+//   alignItems: 'center',
+// };
+// LogBox.ignoreAllLogs();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+export {default} from './.rnstorybook';
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+// import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+// import {
+//   Animated,
+//   GestureResponderEvent,
+//   I18nManager,
+//   LayoutChangeEvent,
+//   PanResponder,
+//   PanResponderGestureState,
+//   StyleSheet,
+//   View,
+// } from 'react-native';
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+// interface SliderProps {
+//   minimumValue?: number;
+//   maximumValue?: number;
+//   step?: number;
+//   value?: number;
+//   onValueChange?: (value: number) => void;
+//   onSlidingComplete?: (value: number) => void;
+//   disabled?: boolean;
+//   style?: any;
+// }
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+// const THUMB_SIZE = 32;
+// const THUMB_RADIUS = THUMB_SIZE / 2;
+// const THUMB_HIT_SLOP = THUMB_SIZE;
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+// const clamp = (value: number, min: number, max: number) =>
+//   Math.max(min, Math.min(max, value));
 
-  return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
+// const Slider = ({
+//   minimumValue = 0,
+//   maximumValue = 1,
+//   step,
+//   value = minimumValue,
+//   onValueChange,
+//   onSlidingComplete,
+//   disabled = false,
+//   style,
+// }: SliderProps) => {
+//   const isRTL = I18nManager.isRTL;
+//   const initialValueRef = useRef(value ?? minimumValue);
+//   const [trackWidth, setTrackWidth] = useState(0);
+//   const [displayValue, setDisplayValue] = useState(initialValueRef.current);
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+//   const translateX = useRef(new Animated.Value(0)).current;
+//   const currentTranslateRef = useRef(0);
+//   const startTranslateRef = useRef(0);
+//   const isDraggingRef = useRef(false);
 
-export default App;
+//   const range = maximumValue - minimumValue || 1;
+
+//   const clampValue = useCallback(
+//     (raw: number) => {
+//       let clampedValue = clamp(raw, minimumValue, maximumValue);
+//       if (step && step > 0) {
+//         const steps = Math.round((clampedValue - minimumValue) / step);
+//         clampedValue = minimumValue + steps * step;
+//         clampedValue = clamp(clampedValue, minimumValue, maximumValue);
+//       }
+//       return clampedValue;
+//     },
+//     [minimumValue, maximumValue, step],
+//   );
+
+//   const valueToTranslate = useCallback(
+//     (val: number, width: number) => {
+//       if (width <= 0) {
+//         return 0;
+//       }
+//       const clampedValue = clampValue(val);
+//       const ratio = (clampedValue - minimumValue) / range;
+//       const normalized = isRTL ? 1 - ratio : ratio;
+//       return normalized * width;
+//     },
+//     [clampValue, minimumValue, range, isRTL],
+//   );
+
+//   const translateToValue = useCallback(
+//     (translate: number, width: number) => {
+//       if (width <= 0) {
+//         return clampValue(minimumValue);
+//       }
+//       const ratio = clamp(translate / width, 0, 1);
+//       const normalized = isRTL ? 1 - ratio : ratio;
+//       const raw = minimumValue + normalized * range;
+//       return clampValue(raw);
+//     },
+//     [clampValue, minimumValue, range, isRTL],
+//   );
+
+//   const clampTranslate = useCallback(
+//     (translate: number, width: number) => clamp(translate, 0, width),
+//     [],
+//   );
+
+//   const updateFromTranslate = useCallback(
+//     (nextTranslate: number, width: number, notify: boolean) => {
+//       const clampedTranslate = clampTranslate(nextTranslate, width);
+//       const snappedValue = translateToValue(clampedTranslate, width);
+//       const snappedTranslate = valueToTranslate(snappedValue, width);
+//       translateX.setValue(snappedTranslate);
+//       currentTranslateRef.current = snappedTranslate;
+//       setDisplayValue(snappedValue);
+//       if (notify) {
+//         onValueChange?.(snappedValue);
+//       }
+//     },
+//     [
+//       clampTranslate,
+//       translateToValue,
+//       valueToTranslate,
+//       translateX,
+//       onValueChange,
+//     ],
+//   );
+
+//   // Sync with external value when not dragging
+//   useEffect(() => {
+//     if (isDraggingRef.current) {
+//       return;
+//     }
+//     const clamped = clampValue(value ?? minimumValue);
+//     setDisplayValue(clamped);
+//     if (trackWidth > 0) {
+//       const translate = valueToTranslate(clamped, trackWidth);
+//       translateX.setValue(translate);
+//       currentTranslateRef.current = translate;
+//     }
+//   }, [
+//     value,
+//     trackWidth,
+//     clampValue,
+//     valueToTranslate,
+//     translateX,
+//     minimumValue,
+//   ]);
+
+//   const handlePanMove = useCallback(
+//     (gestureState: PanResponderGestureState, width: number) => {
+//       const delta = isRTL ? -gestureState.dx : gestureState.dx;
+//       const nextTranslate = startTranslateRef.current + delta;
+//       updateFromTranslate(nextTranslate, width, true);
+//     },
+//     [updateFromTranslate, isRTL],
+//   );
+
+//   const handlePanEnd = useCallback(
+//     (width: number, shouldNotifyComplete: boolean) => {
+//       isDraggingRef.current = false;
+//       const snappedValue = translateToValue(currentTranslateRef.current, width);
+//       const snappedTranslate = valueToTranslate(snappedValue, width);
+//       translateX.setValue(snappedTranslate);
+//       currentTranslateRef.current = snappedTranslate;
+//       setDisplayValue(snappedValue);
+//       if (shouldNotifyComplete) {
+//         onValueChange?.(snappedValue);
+//         onSlidingComplete?.(snappedValue);
+//       }
+//     },
+//     [
+//       translateToValue,
+//       valueToTranslate,
+//       translateX,
+//       onValueChange,
+//       onSlidingComplete,
+//     ],
+//   );
+
+//   const panResponder = useMemo(
+//     () =>
+//       PanResponder.create({
+//         onStartShouldSetPanResponder: () => !disabled,
+//         onMoveShouldSetPanResponder: () => !disabled,
+//         onStartShouldSetPanResponderCapture: () => !disabled,
+//         onMoveShouldSetPanResponderCapture: () => !disabled,
+//         onPanResponderGrant: (evt: GestureResponderEvent) => {
+//           if (disabled || trackWidth <= 0) {
+//             return;
+//           }
+//           isDraggingRef.current = true;
+//           const rawTouchX = evt.nativeEvent.locationX - THUMB_RADIUS;
+//           const clampedTouch = clamp(rawTouchX, 0, trackWidth);
+//           const proposedTranslate = isRTL
+//             ? trackWidth - clampedTouch
+//             : clampedTouch;
+//           const currentTranslate = currentTranslateRef.current;
+//           const distanceFromThumb = Math.abs(
+//             proposedTranslate - currentTranslate,
+//           );
+
+//           if (distanceFromThumb <= THUMB_HIT_SLOP) {
+//             // Treat as grabbing the existing thumb position — don't jump.
+//             startTranslateRef.current = currentTranslate;
+//             const currentValue = translateToValue(currentTranslate, trackWidth);
+//             setDisplayValue(currentValue);
+//             onValueChange?.(currentValue);
+//           } else {
+//             // Treat as tap on track: jump to that location before dragging.
+//             updateFromTranslate(proposedTranslate, trackWidth, true);
+//             startTranslateRef.current = currentTranslateRef.current;
+//           }
+//         },
+//         onPanResponderMove: (
+//           _evt: GestureResponderEvent,
+//           gestureState: PanResponderGestureState,
+//         ) => {
+//           if (disabled || trackWidth <= 0) {
+//             return;
+//           }
+//           handlePanMove(gestureState, trackWidth);
+//         },
+//         onPanResponderRelease: () => {
+//           if (trackWidth <= 0) {
+//             return;
+//           }
+//           handlePanEnd(trackWidth, true);
+//         },
+//         onPanResponderTerminationRequest: () => false,
+//         onPanResponderTerminate: () => {
+//           if (trackWidth <= 0) {
+//             return;
+//           }
+//           handlePanEnd(trackWidth, true);
+//         },
+//       }),
+//     [
+//       disabled,
+//       trackWidth,
+//       handlePanMove,
+//       handlePanEnd,
+//       updateFromTranslate,
+//       translateToValue,
+//       onValueChange,
+//       isRTL,
+//     ],
+//   );
+
+//   const handleTrackLayout = (event: LayoutChangeEvent) => {
+//     const {width} = event.nativeEvent.layout;
+//     const usableWidth = Math.max(width - THUMB_RADIUS * 2, 0);
+//     setTrackWidth(usableWidth);
+//     if (usableWidth > 0) {
+//       const translate = valueToTranslate(displayValue, usableWidth);
+//       translateX.setValue(translate);
+//       currentTranslateRef.current = translate;
+//     }
+//   };
+
+//   const fillWidth =
+//     trackWidth > 0 ? ((displayValue - minimumValue) / range) * trackWidth : 0;
+//   const fillStyle = isRTL
+//     ? [styles.fillBase, {right: 0, width: fillWidth}]
+//     : [styles.fillBase, {left: 0, width: fillWidth}];
+
+//   return (
+//     <View style={[styles.sliderContainer, style]}>
+//       <View
+//         style={styles.touchArea}
+//         onLayout={handleTrackLayout}
+//         {...panResponder.panHandlers}
+//         collapsable={false}>
+//         <View style={styles.track}>
+//           <View style={fillStyle} />
+//         </View>
+//         <Animated.View
+//           style={[
+//             styles.thumbWrapper,
+//             {transform: [{translateX: Animated.add(translateX, THUMB_RADIUS)}]},
+//           ]}
+//           pointerEvents="none">
+//           <View style={styles.thumb} />
+//         </Animated.View>
+//       </View>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   sliderContainer: {
+//     height: 48,
+//     justifyContent: 'center',
+//     paddingHorizontal: 10,
+//   },
+//   touchArea: {
+//     height: 48,
+//     justifyContent: 'center',
+//     width: '100%',
+//     paddingHorizontal: THUMB_RADIUS,
+//   },
+//   track: {
+//     height: 4,
+//     borderRadius: 2,
+//     backgroundColor: '#e0e0e0',
+//     position: 'relative',
+//     width: '100%',
+//     overflow: 'hidden',
+//   },
+//   thumbWrapper: {
+//     position: 'absolute',
+//     top: 8,
+//     left: 0,
+//   },
+//   thumb: {
+//     width: THUMB_SIZE,
+//     height: THUMB_SIZE,
+//     borderRadius: THUMB_RADIUS,
+//     backgroundColor: '#4caf50',
+//     borderWidth: 2,
+//     borderColor: '#ffffff',
+//     shadowColor: '#000',
+//     shadowOffset: {width: 0, height: 2},
+//     shadowOpacity: 0.25,
+//     shadowRadius: 3.84,
+//     elevation: 5,
+//   },
+//   fillBase: {
+//     position: 'absolute',
+//     top: 0,
+//     height: 4,
+//     borderRadius: 2,
+//     backgroundColor: '#4caf50',
+//   },
+// });
+
+// export default function App() {
+//   return (
+//     <View>
+//       <Text>Hello World</Text>
+//       <Slider />
+//     </View>
+//   );
+// }
